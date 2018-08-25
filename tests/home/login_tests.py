@@ -1,6 +1,10 @@
 from selenium import webdriver
 from selenium.webdriver.common.by import By
-class LoginTests():
+from pages.home.login_page import LoginPage
+import unittest
+
+
+class LoginTests(unittest.TestCase):
 
     def test_validLogin(self):
         baseURL = "https://letskodeit.teachable.com"
@@ -9,17 +13,8 @@ class LoginTests():
         driver.implicitly_wait(3)
         driver.get(baseURL)
 
-        loginLink = driver.find_element(By.LINK_TEXT, "Login")
-        loginLink.click()
-
-        emailField = driver.find_element(By.ID, "user_email")
-        emailField.send_keys("test@email.com")
-
-        passwordField = driver.find_element(By.ID, "user_password")
-        passwordField.send_keys("abcabc")
-
-        loginbutton = driver.find_element(By.NAME, "commit")
-        loginbutton.click()
+        lp = LoginPage(driver)
+        lp.login("test@gmail.com", "abcabc")
 
         userIcon = driver.find_element(By.LINK_TEXT, "My Courses")
         if userIcon is not None:
@@ -27,6 +22,3 @@ class LoginTests():
         else:
             print("Login Failed")
         driver.quit()
-
-ff = LoginTests()
-ff.test_validLogin()

@@ -6,7 +6,7 @@ node_modules/
 *-e
 # Vim swap files.
 *.swp
-
+.pytest_cache
 # Ignoring the generated entry_point.sh files in different folders
 Node*Debug/entry_point.sh
 StandaloneC*/entry_point.sh
