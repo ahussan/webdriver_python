@@ -15,10 +15,6 @@ class LoginTests(unittest.TestCase):
 
         lp = LoginPage(driver)
         lp.login("test@gmail.com", "abcabc")
-
-        userIcon = driver.find_element(By.LINK_TEXT, "My Courses")
-        if userIcon is not None:
-            print("Login Successful")
-        else:
-            print("Login Failed")
+        result = lp.verifyLoginSuccessful()
+        assert result == True
         driver.quit()

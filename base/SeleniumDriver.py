@@ -1,5 +1,4 @@
 from telnetlib import EC
-from traceback import print_stack
 
 from selenium.common.exceptions import *
 from selenium.webdriver.common.by import By
@@ -50,7 +49,6 @@ class SeleniumDriver():
             self.log.info("Clicked on element with locator: " + locator + " locatorType: " + locatorType)
         except:
             self.log.info("Cannot click on the element with locator: " + locator + " locatorType: " + locatorType)
-            print_stack()
 
     def sendKeys(self, data, locator, locatorType="id"):
         try:
@@ -59,7 +57,6 @@ class SeleniumDriver():
             self.log.info("Sent data on element with locator: " + locator + " locatorType: " + locatorType)
         except:
             self.log.info("Cannot send data on the element with locator: " + locator + " locatorType: " + locatorType)
-            print_stack()
 
     def isElementPresent(self, locator, locatorType="id"):
         try:
@@ -102,6 +99,5 @@ class SeleniumDriver():
                                                              "stopFilter_stops-0")))
             self.log.info("Element appeared on the web page")
         except:
-            print("Element not appeared on the web page")
-            print_stack()
+            self.log.info("Element not appeared on the web page")
         return element
