@@ -101,3 +101,7 @@ class SeleniumDriver():
         except:
             self.log.info("Element not appeared on the web page")
         return element
+
+
+    def getTitle(self):
+        return self.driver.title

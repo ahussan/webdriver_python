@@ -1,6 +1,4 @@
-from selenium.webdriver.common.by import By
-
-from base.SeleniumDriver import SeleniumDriver
+from base.seleniumdriver import SeleniumDriver
 import utilities.custom_logger as cl
 import logging
 
@@ -19,6 +17,7 @@ class LoginPage(SeleniumDriver):
     _login_button = "commit"
     _user_settings_icon = "//*[@id='navbar']//span[text()='User Settings']"
     _user_icon = "My Courses"
+    _login_not_successful_message = "//div[contains(text(), 'Invalid email or password')]"
 
     def clickLoginLink(self):
         self.elementClick(self._login_link, locatorType= "link")
@@ -40,3 +39,13 @@ class LoginPage(SeleniumDriver):
 
     def verifyLoginSuccessful(self):
         return self.isElementPresent(self._user_icon, locatorType= "link")
+
+    def verifyLoginNotSuccessful(self):
+        return self.isElementPresent(self._login_not_successful_message, locatorType= "xpath")
+
+    def verifyTitle(self):
+        title = self.getTitle()
+        if "Google" in title:
+            return True
+        else:
+            return False
