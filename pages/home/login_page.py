@@ -1,26 +1,28 @@
 from base.seleniumdriver import SeleniumDriver
 import utilities.custom_logger as cl
 import logging
+from base.basepage import BasePage
+from pages.home.navigation_page import NavigationPage
 
-class LoginPage(SeleniumDriver):
+
+class LoginPage(BasePage):
 
     log = cl.customLogger(logging.DEBUG)
 
     def __init__(self, driver):
         super().__init__(driver)
         self.driver = driver
+        self.nav = NavigationPage(driver)
+
 
     #Locators
     _login_link = "Login"
     _email_field = "user_email"
     _password_field = "user_password"
     _login_button = "commit"
-    _user_settings_icon = "//*[@id='navbar']//span[text()='User Settings']"
-    _user_icon = "My Courses"
-    _login_not_successful_message = "//div[contains(text(), 'Invalid email or password')]"
 
     def clickLoginLink(self):
-        self.elementClick(self._login_link, locatorType= "link")
+        self.elementClick(self._login_link, locatorType="link")
 
     def enterEmail(self, email):
         self.sendKeys(email, self._email_field)
@@ -31,21 +33,27 @@ class LoginPage(SeleniumDriver):
     def clickLoginButton(self):
         self.elementClick(self._login_button, locatorType="name")
 
-    def login(self, email, password):
+    def login(self, email="", password=""):
         self.clickLoginLink()
         self.enterEmail(email)
         self.enterPassword(password)
         self.clickLoginButton()
 
     def verifyLoginSuccessful(self):
-        return self.isElementPresent(self._user_icon, locatorType= "link")
+        result = self.isElementPresent("//div[@id='navbar']//li[@class='dropdown']",
+                                       locatorType="xpath")
+        return result
 
-    def verifyLoginNotSuccessful(self):
-        return self.isElementPresent(self._login_not_successful_message, locatorType= "xpath")
+    def verifyLoginFailed(self):
+        result = self.isElementPresent("//div[contains(text(),'Invalid email or password')]",
+                                       locatorType="xpath")
+        return result
 
-    def verifyTitle(self):
-        title = self.getTitle()
-        if "Google" in title:
-            return True
-        else:
-            return False
+    def verifyLoginTitle(self):
+        return self.verifyPageTitle("Let's Kode It")
+
+    def logout(self):
+        self.nav.navigateToUserSettings()
+        logoutLinkElement = self.waitForElement(locator="//div[@id='navbar']//a[@href='/sign_out']",
+                                                locatorType="xpath", pollFrequency=1)
+        self.elementClick(element=logoutLinkElement)
